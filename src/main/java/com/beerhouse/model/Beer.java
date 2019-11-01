@@ -1,29 +1,32 @@
 package com.beerhouse.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * The Beer model
  * @author Guilherme Rodrigues Bueno
  */
 @Entity
+@Table(name="Beer")
 public class Beer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "ingredients", nullable = false)
     private String ingredients;
 
+    @Column(name = "alcohol_content", nullable = false)
     private String alcoholContent;
 
+    @Column(name = "price", nullable = false)
     private Number price;
 
+    @Column(name = "category", nullable = false)
     private String category;
 
     public String getName() {
