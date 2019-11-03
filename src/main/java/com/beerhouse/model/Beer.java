@@ -29,6 +29,26 @@ public class Beer {
     @Column(name = "category", nullable = false)
     private String category;
 
+    public Beer() {
+    }
+
+    public Beer(Integer id, String name, String ingredients, String alcoholContent, Number price, String category) {
+        this.id = id;
+        this.name = name;
+        this.ingredients = ingredients;
+        this.alcoholContent = alcoholContent;
+        this.price = price;
+        this.category = category;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
