@@ -13,6 +13,9 @@ public class BeerDTO {
 
     private String category;
 
+    public BeerDTO() {
+    }
+
     public BeerDTO(Integer id, String name, String ingredients, String alcoholContent, Number price, String category) {
         this.id = id;
         this.name = name;
