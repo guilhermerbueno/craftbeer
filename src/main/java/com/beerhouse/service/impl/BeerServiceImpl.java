@@ -1,39 +1,47 @@
-package com.beerhouse.service;
+package com.beerhouse.service.impl;
 
 import com.beerhouse.dto.BeerDTO;
+import com.beerhouse.mapper.BeerMapper;
 import com.beerhouse.model.Beer;
 import com.beerhouse.repository.BeerRepository;
+import com.beerhouse.service.interfaces.BeerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ResourceNotFoundException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class BeerServiceImpl implements BeerService {
 
-    @Autowired
     private BeerRepository beerRepository;
+    private BeerMapper mapper = new BeerMapper();
+
+    @Autowired
+    public BeerServiceImpl(BeerRepository beerRepository) {
+        this.beerRepository = beerRepository;
+    }
 
     public List<BeerDTO> getAllBeers(){
-        return beerRepository.findAll();
+        return mapper.map(beerRepository.findAll());
     }
 
     public BeerDTO createBeer(BeerDTO beer){
-        return beerRepository.save(beer);
+        return mapper.map(beerRepository.save(mapper.map(beer)));
     }
 
-    public BeerDTO getBeerById(Integer beerId) {
+    private Optional<Beer> getBeer(Integer beerId){
         return beerRepository.findById(beerId);
     }
 
-    public ResponseEntity<BeerDTO> updateBeer(int beerId, BeerDTO beerDetails){
-        Beer beer = beerRepository.findOne(beerId);
+    public Optional<BeerDTO> getBeerById(Integer beerId) {
+        return getBeer(beerId).map(mapper::map);
+    }
+
+    public BeerDTO updateBeer(int beerId, BeerDTO beerDetails){
+        Beer beer = getBeer(beerId).orElse(null);
         if(beer == null){
-            return ResponseEntity.notFound().build();
+            return null;
         }
 
         beer.setName(beerDetails.getName());
@@ -42,24 +50,45 @@ public class BeerServiceImpl implements BeerService {
         beer.setPrice(beerDetails.getPrice());
         beer.setCategory(beerDetails.getCategory());
 
-        final Beer updatedBeer = beerRepository.save(beerDetails);
-        return ResponseEntity.ok(updatedBeer);
+        return mapper.map(beerRepository.save(beer));
     }
 
-    public Map<String, Boolean> deleteBeer(int beerId){
-        Beer beer = beerRepository.findOne(beerId);
+    public Boolean deleteBeer(int beerId){
+        Beer beer = getBeer(beerId).orElse(null);
         if(beer == null){
-            throw new ResourceNotFoundException("Teste", null);
+            return false;
         }
 
-        beerRepository.delete(beer);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
+        beerRepository.deleteById(beerId);
+        return true;
     }
 
-    public ResponseEntity<BeerDTO> partialUpdateBeer(BeerDTO partialUpdate, int beerId){
+    public BeerDTO partialUpdateBeer(BeerDTO beerDTO, int beerId){
+        Beer beer = getBeer(beerId).orElse(null);
+        if(beer == null){
+            return null;
+        }
 
-        return ResponseEntity.ok().build();
+        if(beerDTO.getName() != null){
+            beer.setName(beerDTO.getName());
+        }
+
+        if(beerDTO.getAlcoholContent() != null){
+            beer.setAlcoholContent(beerDTO.getAlcoholContent());
+        }
+
+        if(beerDTO.getIngredients() != null){
+            beer.setIngredients(beerDTO.getIngredients());
+        }
+
+        if(beerDTO.getPrice() != null){
+            beer.setPrice(beerDTO.getPrice());
+        }
+
+        if(beerDTO.getCategory() != null){
+            beer.setCategory(beerDTO.getCategory());
+        }
+
+        return mapper.map(beerRepository.save(beer));
     }
 }
