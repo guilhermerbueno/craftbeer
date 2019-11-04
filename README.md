@@ -2,19 +2,20 @@
 
 O objetivo deste projeto é avaliar o desenvolvimento de uma aplicação java utilizando Spring e APIs.
 
+## Como executar
+Para buildar o projeto e executar os testes utilize: mvn package 
+
+Para executar o projeto utilize: mvn spring-boot:run
+
+No diretório abaixo encontra-se uma coleção que deve ser importado no postman a fim de testar a API
+    
+    craftbeer
+    |
+    |docs
+    |    |___CraftBeer.postman_collection.json
+
 ### Baseado no [Building an Application with Spring Boot](https://spring.io/guides/gs/spring-boot/).
 
-
-## Set up environment
-
-Para iniciar o projeto é necessário realizar o clone deste repositório
-
-```bash
-    $ git clone https://github.com/Sensedia/craftbeer.git
-```
-
-Você deverá compartilhar no seu repositório do github as alterações solicitadas para o projeto. 
-O endereço deste repositório deverá ser enviado para rh@sensedia.com
 
 ## Especificação do projeto
 
